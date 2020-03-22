@@ -1,0 +1,39 @@
+{
+    "name": "amsify42/php-curl-http",
+    "description": "This is a PHP package for making curl http request and getting the response",
+    "keywords": ["php","curl http", "curl", "cURL Http", "php curl http"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amsify42",
+            "email": "amsify42@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0",
+        "amsify42/php-vars-data":  "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit":  "^7.0",
+        "amsify42/php-vars-data":  "dev-master"
+    },
+    "autoload": {
+        "files": [
+            "src/Helper/global.php"
+        ],
+        "psr-4": {
+            "Amsify42\\CurlHttp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+            "src/Helper/global.php"
+        ],
+        "psr-4": {
+            "Amsify42\\Tests\\": "tests/"
+        }
+    }
+}
