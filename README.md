@@ -27,15 +27,15 @@ $curlHttp = new Amsify42\CurlHttp\CurlHttp('http://www.sample.com/user/create');
 $curlHttp->setRequestMethod('POST');
 $curlHttp->setRequestData(['name' => 'test', 'salary' => 123]);
 ```
-or with `Amsify42\CurlHtpp\CurlRequest` instance
+or with `Amsify42\CurlHtpp\Request` instance
 ```php
-$curlRequest = new Amsify42\CurlHtpp\CurlRequest();
+$curlRequest = new Amsify42\CurlHtpp\Request();
 $curlRequest->setMethod('POST');
 $curlRequest->setData(['name' => 'test', 'salary' => 123]);
 
 $curlHttp = new Amsify42\CurlHttp\CurlHttp('http://www.sample.com/user/create', $curlRequest);
 ```
-With `Amsify42\CurlHtpp\CurlRequest` we can also call these methods.
+With `Amsify42\CurlHtpp\Request` we can also call these methods.
 ```php
 $curlRequest->setMethod('PUT');
 $curlRequest->setHeaders(['Authorization: Bearer sf23rsdf23fds']);
@@ -47,7 +47,7 @@ For headers, you can also pass array items as key values
 $curlRequest->setHeaders(['Authorization' => 'Bearer sf23rsdf23fds']);
 ```
 ### 3. Response
-After executing the cURL through `CurlHttp`, we will get response of type `Amsify42\CurlHttp\CurlResponse`
+After executing the cURL through `CurlHttp`, we will get response of type `Amsify42\CurlHttp\Response`
 ```php
 $curlHttp = get_curl_http('http://www.sample.com/users');
 $response = $curlHttp->execute();
