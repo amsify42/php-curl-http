@@ -2,7 +2,7 @@
 
 namespace Amsify42\CurlHttp;
 
-class CurlRequest
+class Request
 {
 	private $headers 	 = [];						
 	private $method 	 = 'GET';
@@ -36,7 +36,25 @@ class CurlRequest
 	 */
 	public function setHeader($header = '')
 	{
-		$this->headers[] = $header;
+		$rHeaders = [];
+		/**
+		 * Creating proper headers if passed as key/value
+		 */
+		if(sizeof($headers) > 0)
+		{
+			foreach($headers as $hk => $header)
+			{
+				if(is_numeric($hk))
+				{
+					$rHeaders[] = $header;
+				}
+				else
+				{
+					$rHeaders[] = $hk.':'.$header;	
+				}
+			}
+		}
+		$this->headers = $rHeaders;
 		return $this;
 	}
 

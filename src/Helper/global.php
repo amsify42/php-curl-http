@@ -1,6 +1,6 @@
 <?php
 
-function get_curl_http($url, \Amsify42\CurlHttp\CurlRequest $curlRequest=NULL)
+function get_curl_http($url, \Amsify42\CurlHttp\Request $curlRequest=NULL)
 {
     return new Amsify42\CurlHttp\CurlHttp($url, $curlRequest);
 }

@@ -2,8 +2,8 @@
 
 namespace Amsify42\CurlHttp;
 
-use Amsify42\CurlHttp\CurlRequest;
-use Amsify42\CurlHttp\CurlResponse;
+use Amsify42\CurlHttp\Request;
+use Amsify42\CurlHttp\Response;
 
 class CurlHttp
 {
@@ -14,10 +14,10 @@ class CurlHttp
 	private $response 	= NULL;
 	private $userAgent 	= '';
 
-	function __construct($url, CurlRequest $request=NULL)
+	function __construct($url, Request $request=NULL)
 	{
 		$this->url 		= $url;
-		$this->request 	= ($request)? $request: new CurlRequest();
+		$this->request 	= ($request)? $request: new Request();
 	}
 
 	/**
@@ -91,6 +91,108 @@ class CurlHttp
 	}
 
 	/**
+	 * Helper get request method
+	 * @param  string $url
+	 * @param  array  $data
+	 * @param  array  $headers
+	 * @return CurlHttp
+	 */
+	public function get($url, $data=NULL, $headers=NULL)
+	{
+		if($data !== NULL)
+		{
+			$url .= '?'.http_build_query($data);
+		}
+		$curlHttp = new static($url);
+		if($headers !== NULL)
+		{
+			$curlHttp->setRequestHeaders($headers);	
+		}
+		return $curlHttp->execute();
+	}
+
+	/**
+	 * Helper post request method
+	 * @param  string $url
+	 * @param  array  $data
+	 * @param  array  $headers
+	 * @param  string $contentType
+	 * @return CurlHttp
+	 */
+	public static function post($url, $data=NULL, $headers=NULL, $contentType=NULL)
+	{
+		$curlHttp = new static($url);
+		$curlHttp->setRequestMethod('POST');
+		if($data !== NULL)
+		{
+			$curlHttp->setRequestData($data);
+		}
+		if($headers !== NULL)
+		{
+			$curlHttp->setRequestHeaders($headers);	
+		}
+		if($contentType !== NULL)
+		{
+			$curlHttp->setRequestContentType($contentType);	
+		}
+		return $curlHttp->execute();
+	}
+
+	/**
+	 * Helper put request method
+	 * @param  string $url
+	 * @param  array  $data
+	 * @param  array  $headers
+	 * @param  string $contentType
+	 * @return CurlHttp
+	 */
+	public static function put($url, $data=NULL, $headers=NULL, $contentType=NULL)
+	{
+		$curlHttp = new static($url);
+		$curlHttp->setRequestMethod('PUT');
+		if($data !== NULL)
+		{
+			$curlHttp->setRequestData($data);
+		}
+		if($headers !== NULL)
+		{
+			$curlHttp->setRequestHeaders($headers);	
+		}
+		if($contentType !== NULL)
+		{
+			$curlHttp->setRequestContentType($contentType);	
+		}
+		return $curlHttp->execute();
+	}
+
+	/**
+	 * Helper delete request method
+	 * @param  string $url
+	 * @param  array  $data
+	 * @param  array  $headers
+	 * @param  string $contentType
+	 * @return CurlHttp
+	 */
+	public static function delete($url, $data=NULL, $headers=NULL, $contentType=NULL)
+	{
+		$curlHttp = new static($url);
+		$curlHttp->setRequestMethod('DELETE');
+		if($data !== NULL)
+		{
+			$curlHttp->setRequestData($data);
+		}
+		if($headers !== NULL)
+		{
+			$curlHttp->setRequestHeaders($headers);	
+		}
+		if($contentType !== NULL)
+		{
+			$curlHttp->setRequestContentType($contentType);	
+		}
+		return $curlHttp->execute();
+	}
+
+	/**
 	 * Execute the Http request
 	 * @return string
 	 */
@@ -150,7 +252,7 @@ class CurlHttp
 			curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
 		}
 
-		$this->response = new CurlResponse($curl);		
+		$this->response = new Response($curl);		
 		curl_close($curl);
 
 		if($this->isLog)
@@ -164,7 +266,7 @@ class CurlHttp
 
 	/**
 	 * response
-	 * @return CurlResponse
+	 * @return Response
 	 */
 	public function response()
 	{

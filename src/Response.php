@@ -4,7 +4,7 @@ namespace Amsify42\CurlHttp;
 
 use Amsify42\PHPVarsData\Data\ArraySimple;
 
-class CurlResponse
+class Response
 {
     private $headers    = [];
     private $bodyData   = NULL;
@@ -90,7 +90,7 @@ class CurlResponse
     private function setArraySimple()
     {
         $this->setJson(true);
-        if(!$this->arraySimple)
+        if($this->arraySimple === NULL)
         {
             $this->arraySimple = new ArraySimple($this->jsonData);
         }
@@ -98,7 +98,7 @@ class CurlResponse
 
     private function setJson($asArray=false)
     {
-        if(!$this->jsonData)
+        if($this->jsonData === NULL)
         {
             $this->jsonData = json_decode($this->bodyData, $asArray);
         }
