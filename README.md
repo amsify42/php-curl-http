@@ -31,6 +31,10 @@ or with `Amsify42\CurlHtpp\Request` instance
 ```php
 $curlRequest = new Amsify42\CurlHtpp\Request();
 $curlRequest->setMethod('POST');
+/**
+ * Set one of the header as Content-Type: application/json if you want to pass bodyData as json
+ */
+$curlRequest->setHeaders(['Content-Type: application/json']);
 $curlRequest->setData(['name' => 'test', 'salary' => 123]);
 
 $curlHttp = new Amsify42\CurlHttp\CurlHttp('http://www.sample.com/user/create', $curlRequest);
@@ -39,8 +43,15 @@ With `Amsify42\CurlHtpp\Request` we can also call these methods.
 ```php
 $curlRequest->setMethod('PUT');
 $curlRequest->setHeaders(['Authorization: Bearer sf23rsdf23fds']);
+/**
+ * Set request ContentType as json if you want to pass bodyData as json
+ */
 $curlRequest->setContenType('json');
 $curlRequest->setData(['name' => 'test', 'salary' => 123]);
+```
+You can simply pass json encoded request data also if you don't want to pass header or contentType for json
+```php
+$curlRequest->setData(json_encode(['name' => 'test', 'salary' => 123]));
 ```
 For headers, you can also pass array items as key values
 ```php
@@ -75,4 +86,12 @@ Methods `post()`, `put()` and `delete()` expects three more optional parameters
 data - expects data array or defaults to NULL
 headers - expects headers array or defaults to NULL
 contentType - expects either string 'json' or defaults to NULL
+```
+For json request data, instead of passing **contentType** parameter as `json` to these methods you can also pass one of the header as `Content-Type: application/json`
+```php
+$response = CurlHttp::post('https://www.somsite.com/user/create', ['name' => 'dummy'], ['Authorization: Bearer sdf23rsdf23', 'Content-Type: application/json']);
+```
+or you can simply pass json encoded request data
+```php
+$response = CurlHttp::post('https://www.somsite.com/user/create', json_encode(['name' => 'dummy']), ['Authorization: Bearer sdf23rsdf23']);
 ```
