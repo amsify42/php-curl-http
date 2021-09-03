@@ -26,35 +26,32 @@ class Request
 	 */
 	public function setHeaders($headers = [])
 	{
-		$this->headers = $headers;
+		foreach($headers as $hk => $header)
+		{
+			if(is_numeric($hk))
+			{
+				$this->setHeader($header);
+			}
+			else
+			{
+				$this->setHeader($hk, $header);
+			}
+		}
 		return $this;
 	}
 
 	/**
 	 * Set Http Header
-	 * @param array $header
+	 * @param string|array $header
+	 * @param string $value
 	 */
-	public function setHeader($header = '')
+	public function setHeader($header='', $value=NULL)
 	{
-		$rHeaders = [];
-		/**
-		 * Creating proper headers if passed as key/value
-		 */
-		if(sizeof($headers) > 0)
+		$this->headers[] = ($value !== NULL)? $header.': '.$value : $header;
+		if(($value !== NULL && strpos($value, 'application/json') !== false) || strpos($header, 'application/json') !== false)
 		{
-			foreach($headers as $hk => $header)
-			{
-				if(is_numeric($hk))
-				{
-					$rHeaders[] = $header;
-				}
-				else
-				{
-					$rHeaders[] = $hk.':'.$header;	
-				}
-			}
+			$this->contentType = 'json';
 		}
-		$this->headers = $rHeaders;
 		return $this;
 	}
 
@@ -101,7 +98,7 @@ class Request
 
 	public function getDataSize()
 	{
-		return sizeof($this->data);	
+		return is_array($this->data)? sizeof($this->data): strlen($this->data);
 	}
 
 	public function getBodyData()
@@ -119,7 +116,7 @@ class Request
 			}
 			else
 			{
-				$this->contentData = http_build_query($this->data);	
+				$this->contentData = $this->data;
 			}
 		}
 		return $this;

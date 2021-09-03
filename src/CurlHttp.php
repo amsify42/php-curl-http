@@ -212,6 +212,7 @@ class CurlHttp
 	        chLogMsg($this->request->getMethod().': '.$this->url);
 	        if($bodyData)
 	        {
+	        	$bodyData = is_array($bodyData)? json_encode($bodyData): $bodyData;
 	        	chLogMsg('Request Data: '.$bodyData);
 	        }
 		}
@@ -221,7 +222,7 @@ class CurlHttp
 		{
 			if($method == 'put' && $formSize > 0)
 			{
-				$this->request->setHeader('Content-Length: '.$this->request->contentLength());
+				$this->request->setHeader('Content-Length', $this->request->contentLength());
 			}
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $this->request->getHeaders());
 		}
