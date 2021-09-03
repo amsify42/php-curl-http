@@ -9,58 +9,70 @@ use Amsify42\CurlHttp\Response;
 
 final class CurlHttpTest extends TestCase
 {
+    private $localAPIPath = 'http://localhost/amsify42/php-curl-http/tests/sampleapi.php';
+
     public function testGetMethod()
     {
-        $curlHttp = new CurlHttp('https://dummy.restapiexample.com/api/v1/employees');
+        $curlHttp = new CurlHttp($this->localAPIPath);
         $response = $curlHttp->execute();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertArrayHasKey('data', $response->json(true));
-        sleep(3);
+        sleep(1);
     }
 
     public function testPostMethod()
     {
         $reqData = [
-                    'name' => 'test',
-                    'salary' => 3000
+                    'name' => 'test'
                 ];
 
-        $curlHttp = get_curl_http('http://dummy.restapiexample.com/api/v1/create');
+        $curlHttp = get_curl_http($this->localAPIPath);
         $curlHttp->setRequestMethod('POST')
                  ->setRequestContentType('json')
                  ->setRequestData($reqData);
         $response = $curlHttp->execute();
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertArrayHasKey('status', $response->json(true));
-        sleep(3);
+        $jsonRes = $response->json(true);
+        $this->assertArrayHasKey('status', $jsonRes);
+        $jsonData = ($jsonRes && isset($jsonRes['data']))? $jsonRes['data']: [];
+        $this->assertArrayHasKey('name', $jsonData);
+        $this->assertEquals('test', isset($jsonData['name'])? $jsonData['name']: '');
+
+        sleep(1);
     }
 
     public function testPutMethod()
     {
         $reqData = [
-                    'name' => 'test..edited',
-                    'salary' => 30000
+                    'id'   => 1,
+                    'name' => 'test..edited'
                 ];
 
         $curlRequest = new Request();
         $curlRequest->setMethod('PUT')
-                    ->setContenType('json')
+                    ->setHeaders(['Content-Type' => 'application/json'])
                     ->setData($reqData);
 
-        $curlHttp = get_curl_http('http://dummy.restapiexample.com/api/v1/update/21', $curlRequest);
+        $curlHttp = get_curl_http($this->localAPIPath, $curlRequest);
         $response = $curlHttp->execute();
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertArrayHasKey('status', $response->json(true));
-        sleep(3);
+        $jsonRes  = $response->json(true);
+        $this->assertArrayHasKey('status', $jsonRes);
+
+        $jsonData = ($jsonRes && isset($jsonRes['data']))? $jsonRes['data']: [];
+        $this->assertArrayHasKey('name', $jsonData);
+        $this->assertEquals('test..edited', isset($jsonData['name'])? $jsonData['name']: '');
+
+        sleep(1);
     }
 
     public function testDeleteMethod()
     {
-        $curlHttp = get_curl_http('http://dummy.restapiexample.com/api/v1/delete/21');
-        $curlHttp->setRequestMethod('DELETE');
+        $curlHttp = get_curl_http($this->localAPIPath);
+        $curlHttp->setRequestMethod('DELETE')->setRequestData(['id' => 1]);
         $response = $curlHttp->execute();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertArrayHasKey('status', $response->json(true));
-        sleep(3);
+        sleep(1);
     }
 }
